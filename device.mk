@@ -1,8 +1,8 @@
-#
+#   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 # Copyright (C) 2021-2025 The LineageOS Project
-#
+#   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 # SPDX-License-Identifier: Apache-2.0
-#
+#   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
@@ -42,7 +42,9 @@ PRODUCT_COPY_FILES += \
 # oplus_udfps 在 qtidisplay 命名空间里声明为 bool_variables → 必须用 soong_config_set_bool
 # （wly 树用的是 soong_config_set，属字符串写法，与 bool 声明不匹配，不要照抄）
 $(call soong_config_set_bool,qtidisplay,oplus_udfps,true)
-$(call soong_config_set,qtidisplay,pxlw_vendor_namespace,vendor/oneplus/sm8450-common)
+# 10T(ovaltine) 无 Pixelworks iris 硬件，不设 pxlw_vendor_namespace；
+# 否则 hardware/qcom-caf/sm8550/display 的 soong_config select 会要求 libpwirisfeature。
+#   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 
 # Fingerprint
 PRODUCT_PACKAGES += \
