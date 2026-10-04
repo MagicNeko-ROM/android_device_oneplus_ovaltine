@@ -1,0 +1,30 @@
+## All proprietary firmware files from this list, unless pinned and noted otherwise,
+## are from OnePlus 10T (CPH2415_15.0.0.700(EX01)).   [source dir: /home/icecat/fw-verify/fw700/img]
+##
+## 生成器: tools/mk-radio-firmware.py（24 分区单一来源 + 1301/1601 blocker 校验）
+## 注意: 全部 24 个分区同版本，禁止混代际。
+
+abl.img;AB|02084da19490eaece06f4450b201fb481d9fb12e
+aop.img;AB|d87804b2dcdccadc4b463c3b3e9906ff7603f02d
+aop_config.img;AB|f67d6310efb34c92c3214321f3e5eb168c61bb24
+bluetooth.img;AB|0bfb59cb9f6a3957fdb7a2e09db28fcca08e1293
+cpucp.img;AB|76bf728055cddba074f7babf0eb399be3224118b
+devcfg.img;AB|3086666733d34e877067c17e6de36bcf05e80fff
+dsp.img;AB|326bf3a68e74e9bda08c248d51ebfafdbf0b57a2
+engineering_cdt.img;AB|13f5f33df779408b04cdfb3d78dd1ebbd3afb7b4
+featenabler.img;AB|215af1309a859703ee59e203706d74b22c0493c4
+hyp.img;AB|961002a7e6752df4607c7c0966fd878b9d9124a4
+imagefv.img;AB|58ddc0e79cc1f50bd9380264ebfa7e186e8d2d89
+keymaster.img;AB|40bf9cb6e1aedd1d7ec5cfdd50f124a82e472c2d
+modem.img;AB|2b2f108a42e58e5c3dd19586607cd6da3ef20fc5
+oplus_sec.img;AB|45c2d35ee21db5d0439702112665a12306216285
+oplusstanvbk.img;AB|306bddce502399556cc525f4cf912c3a7b08c38d
+qupfw.img;AB|c563d3b436d7ee3b03ba223bf76358a98fee8d48
+shrm.img;AB|e7617138b1c66e89e53e295a3807ec299ded2b08
+splash.img;AB|8877705066051214763727acd252d62aba94aa5e
+tz.img;AB|c4831a983daab92b4d7707e1aa6d435012eab48b
+uefi.img;AB|91a44c6e61864ae8fc6a3a549cc01f29cf3f504d
+uefisecapp.img;AB|4d5fabc675367e85bdbef9ce14f86e4f55144f14
+xbl.img;AB|2c8bfee6e20555eb49e4a4280b7cf4963cdaadc6
+xbl_config.img;AB|55854e6fb780c7fbfd11e2fca431e27f94fa9c74
+xbl_ramdump.img;AB|ec1800731e88412ba6ca62a0109cd711c9c61b86
