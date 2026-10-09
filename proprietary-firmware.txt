@@ -1,33 +1,43 @@
-## All proprietary firmware files from this list, unless pinned and noted otherwise,
-## are from OnePlus 10T (CPH2415_15.0.0.1601(EX01)).   [source dir: /home/icecat/fw-1601ex/img]
+## All proprietary firmware files from this list are from
+## OnePlus 10T (CPH2415_15.0.0.700(EX01)).   [source dir: /home/icecat/fw-verify/fw700/img]
 ##
-## 例外（固定死，不随 1601 更新）: abl / xbl / xbl_config / xbl_ramdump = CPH2415_15.0.0.700(EX01)
-##   —— pre-1301 引导链。xbl_ramdump 是 xbl 崩溃时由 xbl 加载的配对件，
-##   实测 700/1301/1002/1601/1601ex/13.1.0.587 六代 sha1 各不相同（版本敏感），必须与 xbl 同代。
-## 生成器: tools/mk-radio-firmware.py（24 分区 + 引导链四件套锁定校验）
-##   注: 该脚本在当前构建树中不存在，本清单为手工维护 —— 换固件时务必同步改这里的 pin。
-## 注意: 其余 20 个分区同版本(1601)，引导链四件套锁定 700，禁止再混入其它代际。
+## ★ 全部 24 个分区固定死 700（pre-1301 那一代），不再跟随任何更新的代际。
+##   理由：700 是 EDL/9008「泄露证书」仍可用的最后一代。包里若混入 1301+ 的固件，
+##   刷了这台（或没换过证书的别的 CPH2415）就会把人家的后路一起弄没。
+##   ⇒ 这条策略是【保护性的】：宁可整组停在旧代，也不往前带一步。
+
+## ⚠️⚠️ 使用警告（刷之前必须看）⚠️⚠️
+##   本包会把【全部 24 个固件分区】写成 CPH2415_15.0.0.700(EX01) —— 这是一次【降级】。
+##   · 适用: 仍停在 pre-1301 代（700 或更早）、且 9008 泄露证书还没被换掉的 CPH2415。
+##          刷它 = 保住那台机器的 9008 后路。
+##   · 危险: 已经在 1301+ / 1601 代、且 ARB 熔丝已被顶高的机器 —— 绝对不要刷。
+##          往低代刷 = 正对熔断方向，可能直接黑砖。
+##   · 本机（734ce825）实测无 ARB，但也【没有】在手机上执行过这次降级，
+##     仅在包侧生效；设备上引导链四件套为 700，其余 16 个仍为 1601。
+## 生成器: tools/mk-radio-firmware.py（本树中不存在，清单为手工维护）
+## ⚠️ 换固件时必须同步改【三处】: radio/*.img、vendor/oneplus/ovaltine/Android.mk
+##    的 add-radio-file-sha1-checked、以及本文件的 pin —— 漏掉 Android.mk 构建会报错。
 abl.img;AB|02084da19490eaece06f4450b201fb481d9fb12e
-aop.img;AB|d216159eb70439e195181054429d03ff6a33380f
-aop_config.img;AB|14c0dc1ae355f7136753e50bf4a75203c0e80b11
-bluetooth.img;AB|833274ae26364186b5612f2b14fbbe9a872485c8
-cpucp.img;AB|42bf384979d9addab95217a929b6a8006253b571
-devcfg.img;AB|da4f075af510ea0abbec2a643c0b55c9bf9b5bc5
+aop.img;AB|d87804b2dcdccadc4b463c3b3e9906ff7603f02d
+aop_config.img;AB|f67d6310efb34c92c3214321f3e5eb168c61bb24
+bluetooth.img;AB|0bfb59cb9f6a3957fdb7a2e09db28fcca08e1293
+cpucp.img;AB|76bf728055cddba074f7babf0eb399be3224118b
+devcfg.img;AB|3086666733d34e877067c17e6de36bcf05e80fff
 dsp.img;AB|326bf3a68e74e9bda08c248d51ebfafdbf0b57a2
 engineering_cdt.img;AB|13f5f33df779408b04cdfb3d78dd1ebbd3afb7b4
-featenabler.img;AB|5ac8eef71bc28890c4365d3964345f79da1e289a
-hyp.img;AB|6bdef6b846df58156e73577a1516091e709baa1e
-imagefv.img;AB|f1680325884988367ccb215edd14d3bd5ef8d3fd
-keymaster.img;AB|28fdb696fdf60cb37931cb256589584187405819
-modem.img;AB|b87848a9cfe025ff7eb49a16f214ed983055dad3
+featenabler.img;AB|215af1309a859703ee59e203706d74b22c0493c4
+hyp.img;AB|961002a7e6752df4607c7c0966fd878b9d9124a4
+imagefv.img;AB|58ddc0e79cc1f50bd9380264ebfa7e186e8d2d89
+keymaster.img;AB|40bf9cb6e1aedd1d7ec5cfdd50f124a82e472c2d
+modem.img;AB|2b2f108a42e58e5c3dd19586607cd6da3ef20fc5
 oplus_sec.img;AB|45c2d35ee21db5d0439702112665a12306216285
-oplusstanvbk.img;AB|2c26fb3e200cfe152cdbd13162904b69d807a46f
-qupfw.img;AB|eb050ec5e9dbc864d4a8a992b47bdaab3d377acb
-shrm.img;AB|db8f05dcd776584bfbccbc7f587acae30f38d492
+oplusstanvbk.img;AB|306bddce502399556cc525f4cf912c3a7b08c38d
+qupfw.img;AB|c563d3b436d7ee3b03ba223bf76358a98fee8d48
+shrm.img;AB|e7617138b1c66e89e53e295a3807ec299ded2b08
 splash.img;AB|8877705066051214763727acd252d62aba94aa5e
-tz.img;AB|2f31106e80bdb4390763a4156d23a8a56d2d7644
-uefi.img;AB|0eb844fb754bc65144c2acdebfe4a6535d595c85
-uefisecapp.img;AB|9f5834a7de8146bec6106e620d3cebd9e451aad5
+tz.img;AB|c4831a983daab92b4d7707e1aa6d435012eab48b
+uefi.img;AB|91a44c6e61864ae8fc6a3a549cc01f29cf3f504d
+uefisecapp.img;AB|4d5fabc675367e85bdbef9ce14f86e4f55144f14
 xbl.img;AB|2c8bfee6e20555eb49e4a4280b7cf4963cdaadc6
 xbl_config.img;AB|55854e6fb780c7fbfd11e2fca431e27f94fa9c74
 xbl_ramdump.img;AB|ec1800731e88412ba6ca62a0109cd711c9c61b86
