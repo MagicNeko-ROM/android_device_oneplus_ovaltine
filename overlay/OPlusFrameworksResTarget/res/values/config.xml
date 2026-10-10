@@ -308,7 +308,20 @@
          during initialization when the setting is still null. -->
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
 
+    <!-- Doze：允许抬起手势传感器（TYPE_PICK_UP_GESTURE）作为环境显示脉冲信号。
+         2026-10-10：AOSP framework-res 默认 false 且本设备树从未覆盖它，导致
+         AmbientDisplayConfiguration.pickupGestureEnabled() 恒为 false、
+         SystemUI DozeSensors 永不注册 pick_up_motion 传感器 → 抬起手机无反应。
+         与 AOD 常亮（doze_always_on）是两回事：这里只开「抬起显示」。 -->
+    <bool name="config_dozePulsePickup">true</bool>
 
+    <!-- 息屏显示/AOD 默认纯黑底（不画锁屏壁纸）。
+         LineageOS 通用 overlay（vendor/lineage/overlay/common/frameworks/base/core/res/
+         res/values/config.xml:464）把它设成了 true，AOD 会去画壁纸；此处覆盖为 false。
+         SystemUI 侧 config_dozeSupportsAodWallpaperOverride 默认 -1（回退到本值），
+         因此改这一处即可。用户仍可在 crDroid 设置里手动打开 AOD 壁纸。
+         2026-10-10 实测：wallpaper_enabled=0 时脉冲为纯黑底 + 时间。 -->
+    <bool name="config_dozeSupportsAodWallpaper">false</bool>
 
     <!-- Type of the udfps long press sensor. Empty if long press is not supported. -->
     <string name="config_dozeUdfpsLongPressSensorType" translatable="false">org.lineageos.sensor.udfps</string>
