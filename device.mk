@@ -47,13 +47,17 @@ $(call soong_config_set_bool,qtidisplay,oplus_udfps,true)
 #   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 
 # Fingerprint
-PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.3-service.oplus
-
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
 
 $(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oplus:libudfps_extension.oplus)
+
+# AIDL fingerprint shim：用本树（A16 头文件）编的版本替换原厂 ODM 里那份（A15 契约）。
+# 原厂 shim 在 A16 上于 SensorProps 拷贝构造抛 length_error -> SIGABRT，
+# 导致 getSensorProps() 失败 -> BiometricServiceRegistry: No sensors found。
+# device_specific:true => 装到 /odm/lib64/；源码模块优先于同名 prebuilt。
+PRODUCT_PACKAGES += \
+    libshims_aidl_fingerprint_v2.oplus
 
 # NFC
 PRODUCT_PACKAGES += \
