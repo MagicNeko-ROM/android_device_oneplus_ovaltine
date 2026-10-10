@@ -59,6 +59,18 @@ $(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oplus:libudfps_exten
 PRODUCT_PACKAGES += \
     libshims_aidl_fingerprint_v2.oplus
 
+# Camera（汐 2026-10-11）—— OPLUS 相机扩展层缺件修复
+# camera.qcom.so 会 dlopen /odm/lib64/libextensionlayer.so（OPLUS 相机扩展层），
+# 该库 NEEDED /odm/lib64/vendor.oplus.hardware.sendextcamcmd-V1-service-impl.so，
+# 后者又 NEEDED vendor.oplus.hardware.sendextcamcmd-V2-ndk_platform.so。
+# 这个库的模块在 vendor/oneplus/ovaltine/Android.bp 里写成 system_ext_specific:true，
+# 于是只装进 /system_ext/lib64；而相机 provider 是 vendor 进程，namespace 里看不到
+# /system_ext ⇒ dlopen 链断 ⇒ CHI 拿不到 OPLUS 扩展层 ⇒ camera_info 记录 +0x108 恒 NULL
+# ⇒ ExtensionModule::InitializeOverrideSession+232 SIGSEGV（一开相机就崩）。
+# 原厂该库在 /vendor（CPH2415_15.0.0.1601_EX01 实测），这里按原厂布局补一份到 vendor 分区。
+PRODUCT_COPY_FILES += \
+    vendor/oneplus/ovaltine/proprietary/vendor/lib64/vendor.oplus.hardware.sendextcamcmd-V2-ndk_platform.so:$(TARGET_COPY_OUT_VENDOR)/lib64/vendor.oplus.hardware.sendextcamcmd-V2-ndk_platform.so
+
 # NFC
 PRODUCT_PACKAGES += \
     android.hardware.nfc-service.nxp \
