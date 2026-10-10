@@ -308,8 +308,21 @@
          during initialization when the setting is still null. -->
     <bool name="config_dozeAlwaysOnEnabled">false</bool>
 
+
+
     <!-- Type of the udfps long press sensor. Empty if long press is not supported. -->
     <string name="config_dozeUdfpsLongPressSensorType" translatable="false">org.lineageos.sensor.udfps</string>
+
+    <!-- UDFPS 传感器位置（像素：X / Y / 半径）。
+         依据：persist.vendor.fingerprint.optical.sensorlocation = 540::2182（实测 fp_state
+         也落在 x 502~603 / y 2115~2260，相符）；半径按同一 persist 的 iconsize=171 折半得到 86，
+         与对照机 wly(10 Pro) 的 114/1440=7.9% 在同一条比例线上（86/1080=8.0%）。
+         这个数组是框架判定「本机是屏下指纹」的依据之一，缺失时相关协调会走兜底路径。 -->
+    <integer-array name="config_udfps_sensor_props" translatable="false">
+        <item>540</item>
+        <item>2182</item>
+        <item>86</item>
+    </integer-array>
 
     <!-- The bounding path of the cutout region of the main built-in display.
          Must either be empty if there is no cutout region, or a string that is parsable by
