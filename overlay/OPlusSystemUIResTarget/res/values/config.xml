@@ -7,4 +7,41 @@
 
     <!-- Whether to enable framework dimming for UDFPS -->
     <bool name="config_udfpsFrameworkDimming">true</bool>
+
+    <!--
+        UDFPS 压暗层强度表 —— 覆盖 SystemUI lineage_config.xml 里的通用值。
+
+        为什么设备树要覆盖它：
+        - 本面板 DTSI 是 oplus,ofp-fp-type = <0x08>，没有 BIT(4) local HBM。
+          指纹按压时面板只能「整屏」进 HBM，而「只亮指纹那一小块」的观感
+          完全靠 SystemUI 的 "Dim Layer for UDFPS" 压暗层撑起来。
+        - LineageOS 通用表在中高亮度段压得极浅：实测亮度 2383 时 alpha 只有
+          0.1508，整屏 HBM 的增益几乎没被抵消 → 观感是「整屏被提亮」。
+        - 上游 lineage-ovaltine-dev 有提交 "Drop udfps dimming brightness
+          alpha array"，等于本机型没有调校，落回通用值。
+
+        本表为 2026-10-11 在设备 734ce825 上热验通过的值
+        （热验件：RRO com.xi.udfpsdim，sha256 70def664a1fc8fe…）。
+
+        格式：<亮度, alpha>。亮度必须严格升序，且末项亮度必须等于面板最大
+        亮度 4095 —— UdfpsHelper 用 brightnessAlphaMap.keys.max() 当
+        maxPanelBrightness 做折算，末项改了会连带缩放整张表的取键。
+    -->
+    <string-array name="config_udfpsDimmingBrightnessAlphaArray" translatable="false">
+        <item>3,250</item>
+        <item>50,250</item>
+        <item>150,248</item>
+        <item>300,246</item>
+        <item>500,244</item>
+        <item>800,242</item>
+        <item>1023,240</item>
+        <item>1300,238</item>
+        <item>1600,236</item>
+        <item>1817,234</item>
+        <item>2047,232</item>
+        <item>2500,230</item>
+        <item>3000,228</item>
+        <item>3500,226</item>
+        <item>4095,224</item>
+    </string-array>
 </resources>
