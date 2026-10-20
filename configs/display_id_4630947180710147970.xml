@@ -10,11 +10,23 @@
     <screenBrightnessMap>
         <point>
             <value>0</value>
-            <nits>2.0</nits>
+            <nits>2.2</nits>
+        </point>
+        <point>
+            <value>0.151</value>
+            <nits>21.2</nits>
+        </point>
+        <point>
+            <value>0.31</value>
+            <nits>104.5</nits>
+        </point>
+        <point>
+            <value>0.454</value>
+            <nits>242.0</nits>
         </point>
         <point>
             <value>0.62</value>
-            <nits>500.0</nits>
+            <nits>481.7</nits>
         </point>
         <point>
             <value>1.0</value>
@@ -48,4 +60,3 @@
     <screenBrightnessRampIncreaseMaxMillis>3000</screenBrightnessRampIncreaseMaxMillis>
     <screenBrightnessRampDecreaseMaxMillis>3000</screenBrightnessRampDecreaseMaxMillis>
 </displayConfiguration>
-

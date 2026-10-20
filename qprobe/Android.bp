@@ -1,0 +1,26 @@
+cc_binary {
+    name: "qprobe_sys",
+    srcs: ["qprobe.cpp"],
+    shared_libs: ["libbinder", "libutils"],
+    cflags: ["-Wno-unused-parameter"],
+}
+
+cc_binary {
+    name: "qprobe_vnd",
+    srcs: ["qprobe.cpp"],
+    shared_libs: ["libbinder", "libutils"],
+    cflags: ["-Wno-unused-parameter"],
+    vendor: true,
+}
+
+cc_binary {
+    name: "qreg",
+    srcs: ["qreg.cpp"],
+    shared_libs: ["libbinder", "libutils"],
+}
+
+cc_binary {
+    name: "qnotify",
+    srcs: ["qnotify.cpp"],
+    shared_libs: ["libbinder", "libutils"],
+}
