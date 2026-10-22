@@ -1,0 +1,15 @@
+<compatibility-matrix version="1.0" type="framework">
+    <!-- The original OPlus fingerprint HAL is renamed to IFingerprint/oplusfp by
+         libfpservicerename so the proxy HAL can own IFingerprint/default.
+         android.* HALs with a non-standard instance name have to be declared
+         here, otherwise checkvintf rejects the build with
+         "instance in device manifest but not in framework compatibility matrix". -->
+    <hal format="aidl">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>2</version>
+        <interface>
+            <name>IFingerprint</name>
+            <instance>oplusfp</instance>
+        </interface>
+    </hal>
+</compatibility-matrix>

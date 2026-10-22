@@ -46,6 +46,12 @@ include vendor/oneplus/ovaltine/BoardConfigVendor.mk
 GPU_DRIVER_Q3 ?= true
 $(call soong_config_set,gpu_oplus,driver_q3,$(GPU_DRIVER_Q3))
 
+# The original fingerprint HAL is renamed to IFingerprint/oplusfp so the proxy
+# HAL can register IFingerprint/default. android.* HALs using a non-standard
+# instance name must be listed here or checkvintf fails the build.
+DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
+    device/oneplus/ovaltine/fingerprint/compatibility_matrix.xml
+
 # Mesa Turnip (freedreno) Vulkan driver switch. Independent from
 # GPU_DRIVER_Q3: Q3 only swaps the Adreno stack, Turnip replaces the Vulkan
 # driver itself with the open-source one.
