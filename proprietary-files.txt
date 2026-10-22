@@ -1375,7 +1375,7 @@ vendor/etc/ltm_config_boe_rm692e5_dsc_cmd_mode_panel.xml|ca9ad48a7e0b721c59d93bf
 odm/bin/hw/vendor.oplus.hardware.biometrics.fingerprint@2.1-service_uff|d5eac669a4ab9a7a36de2391dc845615983d89c5|cba9506d0a3738001150d0abafbd3d7a59abb22a
 odm/etc/init/vendor.oplus.hardware.biometrics.fingerprint@2.1-service.rc|c9f6b44fe71d532f87475d3c6a601bd2b14fb2f8
 # [t12 2026-10-05] 10T(ovaltine) + CPH2415_15.0.0.700 dump: 该文件在 700 中不存在 -> 停用
-# odm/etc/vintf/manifest/manifest_oplus_fingerprint_aidl_v2.xml|9dd836cdef719daf48d5bce7ff1fa5cfeeba78f2
+odm/etc/vintf/manifest/manifest_oplus_fingerprint_aidl_v2.xml|9dd836cdef719daf48d5bce7ff1fa5cfeeba78f2
 
 # Fingerprint firmware
 odm/vendor/firmware/uff_jv.b00|9c9f661b9f140f95faf120140166aba844502634
@@ -1585,3 +1585,17 @@ odm/etc/wifi/bdwlang.b0c;SYMLINK=odm/etc/wifi/qca6490/bdwlang.b0c|41a16e62c3b5d0
 odm/etc/wifi/bdwlang.b0e;SYMLINK=odm/etc/wifi/qca6490/bdwlang.b0e|5108f99037f017b21a2d0558dda5cd4102fb8075
 odm/etc/wifi/bdwlang.elf;SYMLINK=odm/etc/wifi/qca6490/bdwlang.elf|41a16e62c3b5d019c583daa48bd5e2050e07dee1
 odm/etc/wifi/regdb.bin|8124305b477e74ba2117240ed101deef43fd45c4
+
+# OPlus displaypanelfeature（FOD/HBM 点亮层）—— from CPH2415_15.0.0.700 dump
+# 汐 2026-10-10：库存里整块没抓。它是 QService 的客户端 + /dev/oplus_display 的 ioctl 封装，
+# 与 FOD 点亮同一条链。**故意不带 VINTF manifest** —— 框架若去等一个起不来的服务，
+# finishBooting 的 waitForDeclaredService 会永久阻塞、system_server 被 Watchdog 杀。
+odm/bin/hw/vendor.oplus.hardware.displaypanelfeature@1.0-service|df2758d60b06237968df64c6620fc2a14cb44de7
+odm/etc/init/vendor.oplus.hardware.displaypanelfeature@1.0-service.rc|ba93b29def664017fdcd0f35e0503d81543689c8
+odm/etc/permissions/vendor-oplus-hardware-displaypanelfeature.xml|96d4904e00bc5df1bf9a5c6b4a71593fd3388905
+odm/lib64/libdpservice.so|e85be736ae351258b76253dd0c52ae9d28bd307b
+odm/lib64/vendor.oplus.hardware.displaypanelfeature@1.0.so|14c762abdbb536fa392db55056d411a3cfbf96cf
+odm/lib/libdpservice.so|ba90c794438b8117f21307ad0e71727517a7d30a
+odm/lib/vendor.oplus.hardware.displaypanelfeature@1.0.so|8d088481bb4491a3f3a92d9dc90b610604896382
+system_ext/lib64/vendor.oplus.hardware.displaypanelfeature@1.0.so|29169972453d0430b496915f1e3a309da0adf089
+system/lib64/vendor.oplus.hardware.displaypanelfeature-V1-ndk.so|3db4c42aebb3859915f700deed2552d22d3b764c

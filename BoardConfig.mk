@@ -32,3 +32,6 @@ TARGET_RECOVERY_UI_MARGIN_HEIGHT := 103
 
 # Include the proprietary files BoardConfig.
 include vendor/oneplus/ovaltine/BoardConfigVendor.mk
+
+# vendor/extra board config
+-include vendor/extra/BoardConfigExtra.mk
