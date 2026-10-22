@@ -178,4 +178,5 @@ PRODUCT_PACKAGES += VulkanDriverSwitch
 # for. Only the registration call is intercepted; the original binary is not
 # modified, because "/default" is also a path suffix at five other call sites.
 PRODUCT_PACKAGES += \
-    libfpservicerename
+    libfpservicerename \
+    android.hardware.biometrics.fingerprint-service.proxy

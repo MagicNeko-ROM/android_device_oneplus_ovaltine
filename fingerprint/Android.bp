@@ -3,6 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
+// Preloaded into the original OPlus fingerprint HAL. Renames its AIDL
+// registration from IFingerprint/default to IFingerprint/oplusfp so the proxy
+// HAL below can own the name the framework asks for. The original binary is
+// not modified: "/default" also appears as a "<path>/default" suffix at five
+// other call sites inside it.
 cc_library_shared {
     name: "libfpservicerename",
     srcs: ["FpServiceRename.cpp"],
@@ -13,10 +18,39 @@ cc_library_shared {
     ],
     vendor: true,
     proprietary: true,
-    // This is a symbol interposition layer: the whole point of the module is to
-    // export AServiceManager_addService and shadow libbinder_ndk's copy. ThinLTO
-    // drops exported symbols that have no in-module reference, exactly the trap
-    // the fingerprint shim hit, so keep this module out of the LTO pipeline.
+    // Symbol interposition layer: the module exists to export
+    // AServiceManager_addService and shadow libbinder_ndk's copy. ThinLTO
+    // drops exported symbols with no in-module reference, so keep it out of
+    // the LTO pipeline.
+    lto: {
+        never: true,
+    },
+}
+
+// Forwards the fingerprint AIDL surface to the original HAL.
+//
+// Built against the V1 ndk library on purpose. BnSession::getInterfaceVersion
+// is declared `final` in the generated class, so a subclass cannot correct the
+// version the original HAL reports; linking V1 makes this HAL report version 1
+// by construction and the framework then drives the V1 method set, which is
+// what the hardware side actually implements.
+cc_binary {
+    name: "android.hardware.biometrics.fingerprint-service.proxy",
+    srcs: ["FingerprintProxy.cpp"],
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "liblog",
+    ],
+    static_libs: [
+        "android.hardware.biometrics.fingerprint-V1-ndk",
+        "android.hardware.biometrics.common-V1-ndk",
+        "android.hardware.keymaster-V3-ndk",
+    ],
+    vendor: true,
+    proprietary: true,
+    init_rc: ["fingerprint-proxy.rc"],
+    vintf_fragments: ["fingerprint-proxy.xml"],
     lto: {
         never: true,
     },

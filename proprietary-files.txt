@@ -1375,7 +1375,7 @@ vendor/etc/ltm_config_boe_rm692e5_dsc_cmd_mode_panel.xml|ca9ad48a7e0b721c59d93bf
 odm/bin/hw/vendor.oplus.hardware.biometrics.fingerprint@2.1-service_uff|d5eac669a4ab9a7a36de2391dc845615983d89c5|cba9506d0a3738001150d0abafbd3d7a59abb22a
 odm/etc/init/vendor.oplus.hardware.biometrics.fingerprint@2.1-service.rc|1521ff2b481229de4ac55aece992c7fa22c29a3e
 # [t12 2026-10-05] 10T(ovaltine) + CPH2415_15.0.0.700 dump: 该文件在 700 中不存在 -> 停用
-odm/etc/vintf/manifest/manifest_oplus_fingerprint_aidl_v2.xml|9dd836cdef719daf48d5bce7ff1fa5cfeeba78f2
+odm/etc/vintf/manifest/manifest_oplus_fingerprint_aidl_v2.xml|d23fff648012a7f3fab8f8d70a61250f5396db3d
 
 # Fingerprint firmware
 odm/vendor/firmware/uff_jv.b00|9c9f661b9f140f95faf120140166aba844502634
