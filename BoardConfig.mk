@@ -35,3 +35,23 @@ include vendor/oneplus/ovaltine/BoardConfigVendor.mk
 
 # vendor/extra board config
 -include vendor/extra/BoardConfigExtra.mk
+
+# Third-party Adreno driver selection (Meta Quest 3 V@0837.0.7; the files live
+# in vendor/oneplus/sm8450-common/gpu-q3, wired up by that directory's own
+# gpu-q3.mk).
+# ON BY DEFAULT since 2026-10-22, so a plain `brunch ovaltine` ships the Q3
+# stack. `?=` only assigns when unset, so the environment override still wins
+# and falling back to the OEM driver is:
+#   GPU_DRIVER_Q3=false brunch ovaltine
+GPU_DRIVER_Q3 ?= true
+$(call soong_config_set,gpu_oplus,driver_q3,$(GPU_DRIVER_Q3))
+
+# Mesa Turnip (freedreno) Vulkan driver switch. Independent from
+# GPU_DRIVER_Q3: Q3 only swaps the Adreno stack, Turnip replaces the Vulkan
+# driver itself with the open-source one.
+# ON BY DEFAULT since 2026-10-22: the open-source Vulkan ICD is what a plain
+# `brunch ovaltine` installs. The OEM vulkan.adreno.so stays on disk, so
+# per-application override (VulkanDriverSwitch) keeps working and the global
+# fallback is:
+#   GPU_DRIVER_TURNIP=false brunch ovaltine
+GPU_DRIVER_TURNIP ?= true

@@ -55,6 +55,19 @@ PRODUCT_COPY_FILES += \
 
 $(call soong_config_set,surfaceflinger,udfps_lib,//hardware/oplus:libudfps_extension.oplus)
 
+# ---- crDroid 专属参数 -------------------------------------------------------
+# TARGET_HAS_UDFPS
+#   消费点：vendor/addons/config.mk:22 `ifeq ($(TARGET_HAS_UDFPS),true)`
+#           → PRODUCT_PACKAGES += UdfpsIcons UdfpsAnimations
+#   这是 crDroid 专属开关：LineageOS 原版没有 vendor/addons，源码里也不消费它，
+#   不设时默认「关」，屏下指纹能正常解锁，只是没有 crDroid 那套图标/动画皮肤。
+#   本机依据：10T(ovaltine) 为光学屏下指纹，overlay/OPlusFrameworksResTarget 已按
+#           persist.vendor.fingerprint.optical.sensorlocation=540::2182 配好
+#           config_udfps_sensor_props，SystemUI 压暗层与亮度表也已手调。
+#   写法对齐上游 crdroidandroid/android_device_oneplus_salami device.mk:33。
+TARGET_HAS_UDFPS := true
+# -----------------------------------------------------------------------------
+
 # NFC
 PRODUCT_PACKAGES += \
     android.hardware.nfc-service.nxp \
@@ -97,3 +110,63 @@ $(call inherit-product, device/oneplus/sm8450-common/common.mk)
 
 # Inherit from the proprietary files makefile.
 $(call inherit-product, vendor/oneplus/ovaltine/ovaltine-vendor.mk)
+
+# Third-party Adreno graphics stack (Meta Quest 3 V@0837.0.7).
+# ON BY DEFAULT since 2026-10-22. BoardConfig.mk owns the same variable and the
+# two must agree; passing GPU_DRIVER_Q3=false keeps the OEM graphics modules
+# instead. The OEM blobs stay untouched either way, so falling back needs no
+# git operations.
+GPU_DRIVER_Q3 ?= true
+ifeq ($(GPU_DRIVER_Q3),true)
+GPU_OEM_GRAPHICS_MODULES := \
+    eglSubDriverAndroid \
+    libEGL_adreno \
+    libGLESv1_CM_adreno \
+    libGLESv2_adreno \
+    libq3dtools_adreno \
+    libq3dtools_esx \
+    libVkLayer_ADRENO_qprofiler \
+    vulkan.adreno \
+    libadreno_app_profiles \
+    libadreno_utils \
+    libCB \
+    libgsl \
+    libkcl \
+    libkernelmanager \
+    libllvm-glnext \
+    libllvm-qcom \
+    libllvm-qgl \
+    libOpenCL \
+    vendor.qti.qspmhal
+
+# The OEM modules must be filtered inside gpu-q3.mk: inherit-product is
+# recorded here and expanded later, so filtering in this file would run
+# before the OEM module list exists.
+$(call inherit-product, vendor/oneplus/sm8450-common/gpu-q3/gpu-q3.mk)
+endif
+
+# Mesa Turnip Vulkan driver (see BoardConfig GPU_DRIVER_TURNIP).
+# The OEM vulkan.adreno.so stays installed, so switching back is a property
+# change plus a rebuild: both files simply live side by side in
+# /vendor/lib64/hw/ and ro.hardware.vulkan picks one.
+# ro.hardware.vulkan is set here and nowhere else, so there is exactly one
+# assignment and post_process_props stays happy. Turnip (freedreno) is the
+# default since 2026-10-22; the OEM value (adreno) is the documented fallback
+# and only changes which library the loader picks.
+#
+# GPU_DRIVER_TURNIP must be defaulted HERE as well, not only in BoardConfig.mk.
+# BoardConfig and the product config are two separate make passes, and unlike
+# GPU_DRIVER_Q3 this switch has no soong_config_set channel, so a BoardConfig
+# default never reaches this file -- the ifeq below silently took the adreno
+# branch and `get_build_var` still printed true from the board pass. `?=` keeps
+# the environment override (GPU_DRIVER_TURNIP=false brunch ovaltine) working.
+GPU_DRIVER_TURNIP ?= true
+ifeq ($(GPU_DRIVER_TURNIP),true)
+PRODUCT_PACKAGES += vulkan.freedreno
+PRODUCT_VENDOR_PROPERTIES += ro.hardware.vulkan=freedreno
+else
+PRODUCT_VENDOR_PROPERTIES += ro.hardware.vulkan=adreno
+endif
+
+# Per-application Vulkan driver selector (privileged system app, no root needed).
+PRODUCT_PACKAGES += VulkanDriverSwitch
