@@ -170,3 +170,12 @@ endif
 
 # Per-application Vulkan driver selector (privileged system app, no root needed).
 PRODUCT_PACKAGES += VulkanDriverSwitch
+
+# Fingerprint proxy HAL support.
+# libfpservicerename is preloaded into the original OPlus HAL (see the odm init
+# rc) and renames its AIDL registration from IFingerprint/default to
+# IFingerprint/oplusfp, so the proxy HAL can own the name the framework looks
+# for. Only the registration call is intercepted; the original binary is not
+# modified, because "/default" is also a path suffix at five other call sites.
+PRODUCT_PACKAGES += \
+    libfpservicerename

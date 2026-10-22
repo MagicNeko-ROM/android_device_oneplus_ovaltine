@@ -1,0 +1,23 @@
+//
+// SPDX-FileCopyrightText: 2026 The MagicNekoROM Project
+// SPDX-License-Identifier: Apache-2.0
+//
+
+cc_library_shared {
+    name: "libfpservicerename",
+    srcs: ["FpServiceRename.cpp"],
+    shared_libs: [
+        "libbase",
+        "libbinder_ndk",
+        "liblog",
+    ],
+    vendor: true,
+    proprietary: true,
+    // This is a symbol interposition layer: the whole point of the module is to
+    // export AServiceManager_addService and shadow libbinder_ndk's copy. ThinLTO
+    // drops exported symbols that have no in-module reference, exactly the trap
+    // the fingerprint shim hit, so keep this module out of the LTO pipeline.
+    lto: {
+        never: true,
+    },
+}
