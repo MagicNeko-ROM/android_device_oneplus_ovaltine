@@ -172,11 +172,10 @@ endif
 PRODUCT_PACKAGES += VulkanDriverSwitch
 
 # Fingerprint proxy HAL support.
-# libfpservicerename is preloaded into the original OPlus HAL (see the odm init
-# rc) and renames its AIDL registration from IFingerprint/default to
-# IFingerprint/oplusfp, so the proxy HAL can own the name the framework looks
-# for. Only the registration call is intercepted; the original binary is not
-# modified, because "/default" is also a path suffix at five other call sites.
+# The original OPlus HAL is patched to register as IFingerprint/oplusfp (two
+# instructions in its main(), pointing at a new string in a padding area of
+# rodata) so this proxy can own IFingerprint/default. LD_PRELOAD was tried
+# first and does not work: the environment variable is set correctly but the
+# linker never maps the library.
 PRODUCT_PACKAGES += \
-    libfpservicerename \
     android.hardware.biometrics.fingerprint-service.proxy

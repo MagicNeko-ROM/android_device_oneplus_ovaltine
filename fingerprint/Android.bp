@@ -3,29 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 
-// Preloaded into the original OPlus fingerprint HAL. Renames its AIDL
-// registration from IFingerprint/default to IFingerprint/oplusfp so the proxy
-// HAL below can own the name the framework asks for. The original binary is
-// not modified: "/default" also appears as a "<path>/default" suffix at five
-// other call sites inside it.
-cc_library_shared {
-    name: "libfpservicerename",
-    srcs: ["FpServiceRename.cpp"],
-    shared_libs: [
-        "libbase",
-        "libbinder_ndk",
-        "liblog",
-    ],
-    vendor: true,
-    proprietary: true,
-    // Symbol interposition layer: the module exists to export
-    // AServiceManager_addService and shadow libbinder_ndk's copy. ThinLTO
-    // drops exported symbols with no in-module reference, so keep it out of
-    // the LTO pipeline.
-    lto: {
-        never: true,
-    },
-}
 
 // Forwards the fingerprint AIDL surface to the original HAL.
 //

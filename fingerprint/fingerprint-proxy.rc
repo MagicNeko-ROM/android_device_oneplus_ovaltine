@@ -2,4 +2,3 @@ service fps_proxy_hal /vendor/bin/android.hardware.biometrics.fingerprint-servic
     class late_start
     user system
     group system input uhid
-    seclabel u:r:hal_fingerprint:s0
