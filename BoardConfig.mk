@@ -56,8 +56,9 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
 # GPU_DRIVER_Q3: Q3 only swaps the Adreno stack, Turnip replaces the Vulkan
 # driver itself with the open-source one.
 # ON BY DEFAULT since 2026-10-22: the open-source Vulkan ICD is what a plain
-# `brunch ovaltine` installs. The OEM vulkan.adreno.so stays on disk, so
-# per-application override (VulkanDriverSwitch) keeps working and the global
-# fallback is:
+# `brunch ovaltine` installs. Both ICDs stay on disk and a runtime
+# switcher (vulkan.switcher.so, see device.mk) picks per app, so this
+# variable only chooses the image default:
 #   GPU_DRIVER_TURNIP=false brunch ovaltine
 GPU_DRIVER_TURNIP ?= true
+$(call soong_config_set_bool,gpu_oplus,driver_turnip,$(GPU_DRIVER_TURNIP))

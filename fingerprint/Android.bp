@@ -6,11 +6,12 @@
 
 // Forwards the fingerprint AIDL surface to the original HAL.
 //
-// Built against the V1 ndk library on purpose. BnSession::getInterfaceVersion
-// is declared `final` in the generated class, so a subclass cannot correct the
-// version the original HAL reports; linking V1 makes this HAL report version 1
-// by construction and the framework then drives the V1 method set, which is
-// what the hardware side actually implements.
+// Built against the V2 ndk library to match the original HAL, which
+// extract-files.py rewrites to link android.hardware.biometrics.fingerprint-V2-ndk.so.
+// V1 was tried first and boot-looped system_server: FingerprintService reads
+// SensorProps using the framework's current struct layout, and a V1 server
+// writes a shorter parcel than that layout expects, so getSensorProps() throws
+// IllegalArgumentException during BiometricServiceRegistry startup.
 cc_binary {
     name: "android.hardware.biometrics.fingerprint-service.proxy",
     srcs: ["FingerprintProxy.cpp"],
@@ -20,9 +21,9 @@ cc_binary {
         "liblog",
     ],
     static_libs: [
-        "android.hardware.biometrics.fingerprint-V1-ndk",
-        "android.hardware.biometrics.common-V1-ndk",
-        "android.hardware.keymaster-V3-ndk",
+        "android.hardware.biometrics.fingerprint-V4-ndk",
+        "android.hardware.biometrics.common-V4-ndk",
+        "android.hardware.keymaster-V4-ndk",
     ],
     vendor: true,
     proprietary: true,

@@ -1,0 +1,12 @@
+android_app {
+    name: "VulkanSwitch",
+    srcs: ["src/**/*.java"],
+    manifest: "AndroidManifest.xml",
+    sdk_version: "system_current",
+    vendor: true,
+    privileged: true,
+    certificate: "platform",
+    optimize: {
+        enabled: false,
+    },
+}

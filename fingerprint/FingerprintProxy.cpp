@@ -113,6 +113,51 @@ class SessionProxy : public fp::BnSession {
 
     ndk::ScopedAStatus onUiReady() override { return mRemote->onUiReady(); }
 
+    // ---- V5 surface -------------------------------------------------------
+    // The framework is compiled against fingerprint-V5-java, so SensorProps and
+    // the session calls use the V5 layout. The stock HAL only implements the V1
+    // method set, so every *WithContext entry point drops the context object and
+    // forwards to its V1 equivalent. The last three have no V1 counterpart: the
+    // stock HAL cannot honour them, so they report OK and do nothing.
+    ndk::ScopedAStatus authenticateWithContext(
+            int64_t operationId, const common::OperationContext& /*context*/,
+            std::shared_ptr<common::ICancellationSignal>* out) override {
+        return mRemote->authenticate(operationId, out);
+    }
+
+    ndk::ScopedAStatus enrollWithContext(const keymaster::HardwareAuthToken& hat,
+                                         const common::OperationContext& /*context*/,
+                                         std::shared_ptr<common::ICancellationSignal>* out) override {
+        return mRemote->enroll(hat, out);
+    }
+
+    ndk::ScopedAStatus detectInteractionWithContext(
+            const common::OperationContext& /*context*/,
+            std::shared_ptr<common::ICancellationSignal>* out) override {
+        return mRemote->detectInteraction(out);
+    }
+
+    ndk::ScopedAStatus onPointerDownWithContext(const fp::PointerContext& context) override {
+        return mRemote->onPointerDown(context.pointerId, context.x, context.y, context.minor,
+                                      context.major);
+    }
+
+    ndk::ScopedAStatus onPointerUpWithContext(const fp::PointerContext& context) override {
+        return mRemote->onPointerUp(context.pointerId);
+    }
+
+    ndk::ScopedAStatus onContextChanged(const common::OperationContext& /*context*/) override {
+        return ndk::ScopedAStatus::ok();
+    }
+
+    ndk::ScopedAStatus onPointerCancelWithContext(const fp::PointerContext& /*context*/) override {
+        return ndk::ScopedAStatus::ok();
+    }
+
+    ndk::ScopedAStatus setIgnoreDisplayTouches(bool /*shouldIgnore*/) override {
+        return ndk::ScopedAStatus::ok();
+    }
+
   private:
     std::shared_ptr<fp::ISession> mRemote;
 };

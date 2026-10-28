@@ -1,0 +1,28 @@
+cc_library_shared {
+    name: "vulkan_switcher",
+    stem: "vulkan.switcher",
+    vendor: true,
+    relative_install_path: "hw",
+    compile_multilib: "64",
+    cpp_std: "gnu++17",
+    srcs: ["vulkan_switcher.cpp"],
+    header_libs: [
+        "hwvulkan_headers",
+        "vulkan_headers",
+    ],
+    shared_libs: [
+        "libdl",
+        "liblog",
+    ],
+    cppflags: [
+        "-Wno-missing-variable-declarations",
+    ],
+}
+
+// Runtime ICD selection helper (root shell).
+sh_binary {
+    name: "vulkan-switch",
+    src: "vulkan-switch.sh",
+    filename: "vulkan-switch",
+    vendor: true,
+}

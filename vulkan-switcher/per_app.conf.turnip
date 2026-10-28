@@ -1,0 +1,22 @@
+# Vulkan ICD selection, read by /vendor/lib64/hw/vulkan.switcher.so.
+#
+#   <package>=<subname>   load /vendor/lib64/hw/vulkan.<subname>.so for that app
+#   *=<subname>           default for every process without an exact rule
+#
+# Known subnames:
+#   adreno       OEM Qualcomm driver (vulkan.adreno.so), Vulkan 1.3.295
+#   freedreno    Mesa Turnip (vulkan.freedreno.so), Vulkan 1.4.x on a7xx
+#
+# This file is the image default and is read-only at runtime. To change a
+# mapping without rebuilding, write the same syntax to
+# /data/misc/vulkan/per_app.conf -- it takes priority over this file, and only
+# the affected app has to restart (force-stop, then relaunch).
+#
+# Malformed lines, unknown subnames and packages that match nothing are
+# ignored; the driver always falls back to something loadable.
+
+*=freedreno
+
+# Per-app examples, off by default:
+# com.tungsten.fcl=adreno       # avoid Turnip shader-compile stalls in some FCL versions
+# gpuservice=adreno             # keep `dumpsys gpu` reporting the OEM ICD

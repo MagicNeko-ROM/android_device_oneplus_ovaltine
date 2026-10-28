@@ -1,0 +1,5 @@
+on boot
+    mkdir /data/misc/vulkan 0771 system system
+    chown system system /data/misc/vulkan
+    chmod 0771 /data/misc/vulkan
+    restorecon /data/misc/vulkan

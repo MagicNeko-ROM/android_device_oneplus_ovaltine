@@ -1,0 +1,14 @@
+# Vulkan ICD selection, read by /vendor/lib64/hw/vulkan.switcher.so.
+#
+#   <package>=<subname>   load /vendor/lib64/hw/vulkan.<subname>.so for that app
+#   *=<subname>           default for every process without an exact rule
+#
+# This image ships the OEM Qualcomm ICD as the default for everything. Turnip
+# (freedreno) is installed next to it, so an app can be moved over with a single
+# line in /data/misc/vulkan/per_app.conf -- no rebuild, no reboot of the system,
+# just a force-stop of that app.
+
+*=adreno
+
+# Per-app examples:
+# com.tungsten.fcl=freedreno    # Mesa Turnip for the Minecraft launcher
