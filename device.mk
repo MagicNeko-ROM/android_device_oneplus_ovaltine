@@ -47,11 +47,24 @@ $(call soong_config_set_bool,qtidisplay,oplus_udfps,true)
 #   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 
 # Fingerprint
-# The HIDL 2.3 service from hardware/oplus/hidl/fingerprint is NOT installed:
-# its instance is missing from the VINTF manifest, so it SIGSEGVs at boot
-# (/vendor/bin/hw/android.hardware.biometrics.fingerprint@2.3-service.oplus).
-# Fingerprint is served by the AIDL proxy in device/oneplus/ovaltine/fingerprint,
-# which forwards to the stock AIDL HAL registered as IFingerprint/oplusfp.
+# 回到 LineageOS 上游方案（sm8350/sm8450 都是这一套）：
+#   hardware/oplus/hidl/fingerprint 提供 HIDL 2.3 service，framework 侧仍有
+#   .../biometrics/sensors/fingerprint/hidl 路径（A16 未移除 HIDL 指纹支持），
+#   hardware/interfaces/biometrics/fingerprint/2.1|2.2|2.3 也都在。
+#
+# avium 之前把这一行注释掉、改走自造 AIDL proxy（device/oneplus/ovaltine/
+# fingerprint），但那个 proxy 至今没打通：createSession 打到 stock HAL 上是
+# BAD_TYPE，framework 又不 catch 异常，必须靠哑 session 兜住。
+#
+# 关于「缺 VINTF 声明导致 SIGSEGV」那条注释：因果是反的。service 不进
+# PRODUCT_PACKAGES -> 产物里没有它 -> 它自带的 vintf_fragments 不会合并 ->
+# manifest 里自然查不到 fingerprint。启用后 vintf_fragments 会自动合并。
+# stock HAL 恢复原始版（odm 里注册 IFingerprint/default，见
+# vendor/oneplus/ovaltine/proprietary/odm/etc/vintf/manifest/
+# manifest_oplus_fingerprint_aidl_v2.xml），framework 直接连它，
+# 不需要 HIDL 2.3 service，也不需要 AIDL proxy。
+# 依据：crDroidAndroid-16.0-20261012-ovaltine-v12.12-livefix.zip 里
+# fps_hal 注册 /default、没有 2.3-service 的 rc，指纹正常工作。
 # PRODUCT_PACKAGES += \
 #     android.hardware.biometrics.fingerprint@2.3-service.oplus
 
@@ -225,5 +238,7 @@ PRODUCT_PACKAGES += \
 # boot-loops system_server. The PJG SensorProps shim only rewrites field values,
 # not the parcel layout, so it cannot paper over the mismatch.
 # Re-enable only once the proxy speaks V5 (freeze aidl_api/.../5 first).
+# AIDL proxy 停用：改用上游 HIDL 2.3 service 后不再需要。
+# 源码保留在 device/oneplus/ovaltine/fingerprint/ 供以后参考。
 # PRODUCT_PACKAGES += \
 #     android.hardware.biometrics.fingerprint-service.proxy
