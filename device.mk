@@ -4,6 +4,17 @@
 # SPDX-License-Identifier: Apache-2.0
 #   （原行内容见 port-t5/evidence/device_oneplus_ovaltine_device.mk.before）
 
+# AviumUI build configuration
+# This device ships with GMS. WITH_GMS requires vendor/pixel/gms,
+# vendor/pixel/clocks and vendor/pixel/sounds to be checked out; run
+#   avium get_gms --cli --update-local-manifests --run-sync
+# once after a fresh repo sync, otherwise the build aborts with
+# "Aborting due to missing required repositories".
+WITH_GMS := true
+
+# Shown as ro.avium.maintainer in the build fingerprint
+AVIUM_MAINTAINER := MagicNekoROM
+
 # AAPT
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
